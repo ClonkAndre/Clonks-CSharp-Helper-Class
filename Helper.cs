@@ -260,6 +260,15 @@ internal static class Helper {
             }
             return defaultValue;
         }
+        public static long Parse(string s, long defaultValue = 0)
+        {
+            long result;
+            bool parseResult = long.TryParse(s, out result);
+            if (parseResult) {
+                return result;
+            }
+            return defaultValue;
+        }
         public static ulong Parse(string s, ulong defaultValue = 0)
         {
             ulong result;
