@@ -1,4 +1,5 @@
 // Clonk's Helper Class
+// https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
 // Last updated: 5/12/2022
 
 #region Imports
