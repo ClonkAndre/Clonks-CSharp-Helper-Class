@@ -1,6 +1,6 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 5/12/2022
+// Last updated: 6/13/2022
 
 #region Imports
 using System;
@@ -20,6 +20,7 @@ using System.Text;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Microsoft.VisualBasic;
+using Microsoft.Win32;
 #endregion
 
 #region Public Enums
@@ -254,6 +255,30 @@ internal static class Helper {
             }
             return defaultValue;
         }
+    }
+    
+    /// <summary>
+    /// Class to register or unregister URI Schemes.
+    /// </summary>
+    public class URISchemeHandler {
+    
+        public static void Register(string protocolName, string executablePath)
+        {
+            RegistryKey regKey = Registry.ClassesRoot.CreateSubKey(protocolName);
+
+            regKey.CreateSubKey("DefaultIcon").SetValue(null, string.Format("{0}{1},1{0}", (char)34, executablePath));
+
+            regKey.SetValue(null, string.Format("URL:{0} Protocol", protocolName));
+            regKey.SetValue("URL Protocol", "");
+
+            regKey = regKey.CreateSubKey(@"shell\open\command");
+            regKey.SetValue(null, string.Format("{0}{1}{0} {0}%1{0}", (char)34, executablePath));
+        }
+        public static void Unregister(string protocolName)
+        {
+            Registry.ClassesRoot.DeleteSubKeyTree(protocolName, false);
+        }
+
     }
     #endregion
 
