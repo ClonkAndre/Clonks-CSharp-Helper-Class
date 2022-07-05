@@ -18,6 +18,7 @@ using System.Security.Cryptography;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
@@ -402,6 +403,16 @@ internal static class Helper {
         double num = Math.Round(bytes / Math.Pow(1024, place), 1);
         return string.Format("{0} {1}", (Math.Sign(byteCount) * num).ToString(), suf[place]);
     }
+    
+    /// <summary>
+	/// Converts a <see cref="string"/> to a <see cref="SolidColorBrush"/>.
+	/// </summary>
+	/// <param name="HexColorString">The string representation of a HEXadecimal color string.</param>
+	/// <returns>A new <see cref="SolidColorBrush"/> from the HEXadecimal color string.</returns>
+	public static SolidColorBrush ToBrush(this string HexColorString)
+	{
+		return (SolidColorBrush)(new BrushConverter().ConvertFrom(HexColorString));
+	}
     #endregion
 
 }
