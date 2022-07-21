@@ -1,6 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 6/13/2022
+// Last updated: 7/21/2022
+// Last Added: ToColor string extension.
 
 #region Imports
 using System;
@@ -18,6 +19,7 @@ using System.Security.Cryptography;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.VisualBasic;
@@ -405,14 +407,24 @@ internal static class Helper {
     }
     
     /// <summary>
-	/// Converts a <see cref="string"/> to a <see cref="SolidColorBrush"/>.
-	/// </summary>
-	/// <param name="HexColorString">The string representation of a HEXadecimal color string.</param>
-	/// <returns>A new <see cref="SolidColorBrush"/> from the HEXadecimal color string.</returns>
-	public static SolidColorBrush ToBrush(this string HexColorString)
-	{
-		return (SolidColorBrush)(new BrushConverter().ConvertFrom(HexColorString));
-	}
+    /// Converts a <see cref="string"/> to a <see cref="SolidColorBrush"/>.
+    /// </summary>
+    /// <param name="HexColorString">The string representation of a HEXadecimal color string.</param>
+    /// <returns>A new <see cref="SolidColorBrush"/> from the HEXadecimal color string.</returns>
+    public static SolidColorBrush ToBrush(this string HexColorString)
+    {
+    	return (SolidColorBrush)(new BrushConverter().ConvertFrom(HexColorString));
+    }
+    
+    /// <summary>
+    /// Converts a <see cref="string"/> to a <see cref="System.Windows.Media.Color"/>.
+    /// </summary>
+    /// <param name="HexColorString">The string representation of a HEXadecimal color string.</param>
+    /// <returns>A new <see cref="System.Windows.Media.Color"/> from the HEXadecimal color string.</returns>
+    public static System.Windows.Media.Color ToColor(this string HexColorString)
+    {
+    	return (System.Windows.Media.Color)(new System.Windows.Media.ColorConverter().ConvertFrom(HexColorString));
+    }
     #endregion
 
 }
