@@ -88,6 +88,9 @@ public class WPFStuff {
         {
             var Handle = (new WindowInteropHelper(Window)).Handle;
 
+	    if (Handle == IntPtr.Zero)
+		return;
+		
             var Source = HwndSource.FromHwnd(Handle);
             Source.RemoveHook(new HwndSourceHook(WndProc));
         }
