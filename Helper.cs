@@ -1,7 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 7/21/2022
-// Last Added: ToColor string extension.
+// Last updated: 7/22/2022
+// Last Added: ProcessHelper class.
 
 #region Imports
 using System;
