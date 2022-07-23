@@ -1,13 +1,14 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 7/22/2022
-// Last Added: ProcessHelper class.
+// Last updated: 7/24/2022
+// Last Added: TakeScreenshot function.
 
 #region Imports
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Imaging;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -474,6 +475,39 @@ internal static class Helper {
         int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
         double num = Math.Round(bytes / Math.Pow(1024, place), 1);
         return string.Format("{0} {1}", (Math.Sign(byteCount) * num).ToString(), suf[place]);
+    }
+    
+        /// <summary>
+    /// Takes a Screenshot of the Screen.
+    /// </summary>
+    /// <param name="saveTo">The path where the Screenshot will be saved to.</param>
+    /// <param name="width">The width of the Screenshot.</param>
+    /// <param name="height">The height of the Screenshot.</param>
+    /// <param name="imageFormat">The <see cref="ImageFormat"/> the Screenshot should be saved as.</param>
+    /// <returns>A <see cref="AResult"/> object that contains information if the operation failed or not. Returns true if the Screenshot was taken and saved successfully.</returns>
+    public static AResult TakeScreenshot(string saveTo, int width, int height, ImageFormat imageFormat)
+    {
+        try {
+            // Take Screenshot
+            using (Bitmap b = new Bitmap(width, height)) {
+                using (Graphics g = Graphics.FromImage(b)) {
+                    g.CopyFromScreen(0, 0, 0, 0, b.Size);
+                }
+
+                b.Save(saveTo, imageFormat);
+            }
+
+            // Check if Screenshot was saved
+            if (File.Exists(saveTo)) {
+                return new AResult(null, true);
+            }
+            else {
+                return new AResult(null, false);
+            }
+        }
+        catch (Exception ex) {
+            return new AResult(ex, null);
+        }
     }
     
     /// <summary>
