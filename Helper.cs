@@ -1,7 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 7/24/2022
-// Last Added: TakeScreenshot function.
+// Last updated: 7/27/2022
+// Last Added: GetYouTubeThumbnailURLFromVideoID function.
 
 #region Imports
 using System;
@@ -357,6 +357,11 @@ internal static class Helper {
     #endregion
 
     #region Functions
+    public static string GetYouTubeThumbnailURLFromVideoID(string id)
+    {
+        return string.Format("https://img.youtube.com/vi/{0}/0.jpg", id);
+    }
+    
     public static byte[] GetByteArray(Stream input)
     {
         using (MemoryStream ms = new MemoryStream()) {
