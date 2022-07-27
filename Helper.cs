@@ -357,6 +357,37 @@ internal static class Helper {
     #endregion
 
     #region Functions
+    public static string GetYouTubeVideoIDFromURL(string url)
+    {
+        try {
+            if (!string.IsNullOrWhiteSpace(url)) {
+                string id = url;
+
+                // Check URL format
+                if (id.Contains("youtube.com") && id.Contains("embed")) { // Example: https://www.youtube.com/embed/M80K51DosFo?rel=0&autoplay=0&controls=1&fs=0&iv_load_policy=3
+                    id = id.Split('/')[4];
+
+                    if (id.Contains('?')) { // Contains parameters
+                        return id.Split('?')[0];
+                    }
+                    else {
+                        return id;
+                    }
+                }
+                if (id.Contains("youtube.com") && id.Contains("watch?v=")) { // Example: https://www.youtube.com/watch?v=M80K51DosFo
+                    return id.Split('=')[1];
+                }
+                if (id.Contains("youtu.be")) { // Example: https://youtu.be/M80K51DosFo
+                    return id.Split('/')[3];
+                }
+
+                return id;
+            }
+            return string.Empty;
+        }
+        catch (Exception) { }
+        return string.Empty;
+    }
     public static string GetYouTubeThumbnailURLFromVideoID(string id)
     {
         return string.Format("https://img.youtube.com/vi/{0}/0.jpg", id);
