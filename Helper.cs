@@ -1,7 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 7/27/2022
-// Last Added: GetYouTubeThumbnailURLFromVideoID function.
+// Last updated: 7/29/2022
+// Last Added: System.Reflection using statement.
 
 #region Imports
 using System;
@@ -16,6 +16,7 @@ using System.IO.Compression;
 using System.Linq;
 using System.Management;
 using System.Net.NetworkInformation;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -23,6 +24,7 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
 #endregion
