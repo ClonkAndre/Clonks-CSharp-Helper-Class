@@ -1,7 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 7/29/2022
-// Last Added: System.Reflection using statement.
+// Last updated: 8/1/2022
+// Last Added: GetDateAndTimeStringForFileName function.
 
 #region Imports
 using System;
@@ -420,6 +420,12 @@ internal static class Helper {
             return false;
         }
     }
+	
+	public static string GetDateAndTimeStringForFileName()
+    {
+        DateTime now = DateTime.Now;
+        return string.Format("{0}.{1}.{2}@{3}_{4}_{5}-{6}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second, now.Millisecond);
+    }
     public static string GetFileVersion(string fileName)
     {
         try {
@@ -547,26 +553,28 @@ internal static class Helper {
             return new AResult(ex, null);
         }
     }
-    
-    /// <summary>
-    /// Converts a <see cref="string"/> to a <see cref="SolidColorBrush"/>.
-    /// </summary>
-    /// <param name="HexColorString">The string representation of a HEXadecimal color string.</param>
-    /// <returns>A new <see cref="SolidColorBrush"/> from the HEXadecimal color string.</returns>
-    public static SolidColorBrush ToBrush(this string HexColorString)
-    {
-    	return (SolidColorBrush)(new BrushConverter().ConvertFrom(HexColorString));
-    }
-    
-    /// <summary>
-    /// Converts a <see cref="string"/> to a <see cref="System.Windows.Media.Color"/>.
-    /// </summary>
-    /// <param name="HexColorString">The string representation of a HEXadecimal color string.</param>
-    /// <returns>A new <see cref="System.Windows.Media.Color"/> from the HEXadecimal color string.</returns>
-    public static System.Windows.Media.Color ToColor(this string HexColorString)
-    {
-    	return (System.Windows.Media.Color)(new System.Windows.Media.ColorConverter().ConvertFrom(HexColorString));
-    }
     #endregion
+
+	#region Extensions
+	/// <summary>
+	/// Converts a <see cref="string"/> to a <see cref="SolidColorBrush"/>.
+	/// </summary>
+	/// <param name="HexColorString">The string representation of a HEXadecimal color string.</param>
+	/// <returns>A new <see cref="SolidColorBrush"/> from the HEXadecimal color string.</returns>
+	public static SolidColorBrush ToBrush(this string HexColorString)
+	{
+		return (SolidColorBrush)(new BrushConverter().ConvertFrom(HexColorString));
+	}
+	
+	/// <summary>
+	/// Converts a <see cref="string"/> to a <see cref="System.Windows.Media.Color"/>.
+	/// </summary>
+	/// <param name="HexColorString">The string representation of a HEXadecimal color string.</param>
+	/// <returns>A new <see cref="System.Windows.Media.Color"/> from the HEXadecimal color string.</returns>
+	public static System.Windows.Media.Color ToColor(this string HexColorString)
+	{
+		return (System.Windows.Media.Color)(new System.Windows.Media.ColorConverter().ConvertFrom(HexColorString));
+	}
+	#endregion
 
 }
