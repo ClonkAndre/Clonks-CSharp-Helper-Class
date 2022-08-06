@@ -1,9 +1,8 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 8/1/2022
+// Last updated: 8/7/2022
 // Last Added: GetDateAndTimeStringForFileName function.
 
-#region Imports
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,7 +26,6 @@ using System.Windows.Media.Imaging;
 
 using Microsoft.VisualBasic;
 using Microsoft.Win32;
-#endregion
 
 #region Public Enums
 public enum FileSizes {
@@ -484,20 +482,6 @@ internal static class Helper {
         catch (Exception ex) {
             return new AResult(ex, null);
         }
-    }
-
-    public static double GetVRAM()
-    {
-        try {
-            using (ManagementClass c = new ManagementClass("Win32_VideoController")) {
-                foreach (ManagementObject o in c.GetInstances()) {
-                    FileSize size = GetExactFileSize(long.Parse(o["AdapterRam"].ToString()));
-                    return size.Size;
-                }
-            }
-        }
-        catch (Exception) { }
-        return 1024;
     }
 
     public static FileSize GetExactFileSize(long byteCount)
