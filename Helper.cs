@@ -1,7 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 8/7/2022
-// Last Added: GetDateAndTimeStringForFileName function.
+// Last updated: 8/14/2022
+// Change: Added GetMD5StringFromFile function, changed GetMD5StringFromFolder function to be more efficient.
 
 using System;
 using System.Collections;
@@ -444,8 +444,16 @@ internal static class Helper {
             return string.Empty;
         }
     }
-
-    public static AResult GetMD5StringFromFolder(string folder)
+    /// <summary>
+    /// Creates an MD5 Hash string from the given directory.
+    /// </summary>
+    /// <param name="folder">The directory the hash should be created from.</param>
+    /// <param name="ignoredFiles">
+    /// Specify files that should be ignored while creating the MD5 Hash.<br/>
+    /// The file name will be <b>lowered</b> while checking, so you should add file names to this list that are <b>lowercase</b>.
+    /// </param>
+    /// <returns>A <see cref="AResult"/> object that contains information if the operation failed or not. Returns an MD5 Hash string if successful.</returns>
+    public static AResult GetMD5StringFromFolder(string folder, List<string> ignoredFiles = null)
     {
         try {
             List<string> files = Directory.GetFiles(folder, "*.*", SearchOption.TopDirectoryOnly).OrderBy(p => p).ToList();
@@ -455,8 +463,11 @@ internal static class Helper {
                 for (int i = 0; i < files.Count; i++) {
                     string file = files[i];
 
-                    if (Path.GetFileName(file).ToLower() == "installscript.vdf")
-                        continue;
+                    // There are files to be ignored
+                    if (ignoredFiles != null) {
+                        if (ignoredFiles.Contains(Path.GetFileName(file).ToLower()))
+                            continue;
+                    }
 
                     // Hash path
                     string realtivePath = file.Substring(folder.Length + 1);
@@ -475,6 +486,27 @@ internal static class Helper {
                     }
 
                 }
+
+                return new AResult(null, BitConverter.ToString(md5.Hash).Replace("-", "").ToLower());
+            }
+        }
+        catch (Exception ex) {
+            return new AResult(ex, null);
+        }
+    }
+    /// <summary>
+    /// Creates an MD5 Hash string from the given file.
+    /// </summary>
+    /// <param name="file">The file the hash should be created from.</param>
+    /// <returns>A <see cref="AResult"/> object that contains information if the operation failed or not. Returns an MD5 Hash string if successful.</returns>
+    public static AResult GetMD5StringFromFile(string file)
+    {
+        try {
+            using (MD5 md5 = MD5.Create()) {
+                byte[] contentBytes = File.ReadAllBytes(file);
+                if (contentBytes == null) return new AResult(new ArgumentNullException("contentBytes was null."), null);
+
+                md5.TransformFinalBlock(contentBytes, 0, contentBytes.Length);
 
                 return new AResult(null, BitConverter.ToString(md5.Hash).Replace("-", "").ToLower());
             }
