@@ -1,7 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 8/14/2022
-// Change: Added GetMD5StringFromFile function, changed GetMD5StringFromFolder function to be more efficient.
+// Last updated: 8/21/2022
+// Change: Added GetWeekNumberOfMonth function.
 
 using System;
 using System.Collections;
@@ -444,6 +444,18 @@ internal static class Helper {
             return string.Empty;
         }
     }
+    
+    public static int GetWeekNumberOfMonth(DateTime date)
+    {
+        DateTime firstMonthDay = new DateTime(date.Year, date.Month, 1);
+        DateTime firstMonthMonday = firstMonthDay.AddDays((DayOfWeek.Monday + 7 - firstMonthDay.DayOfWeek) % 7);
+        if (firstMonthMonday > date) {
+            firstMonthDay = firstMonthDay.AddMonths(-1);
+            firstMonthMonday = firstMonthDay.AddDays((DayOfWeek.Monday + 7 - firstMonthDay.DayOfWeek) % 7);
+        }
+        return (date - firstMonthMonday).Days / 7 + 1;
+    }
+    
     /// <summary>
     /// Creates an MD5 Hash string from the given directory.
     /// </summary>
