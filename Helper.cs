@@ -1,7 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 8/21/2022
-// Change: Added GetWeekNumberOfMonth function.
+// Last updated: 8/26/2022
+// Change: Changed "StringCompression" class name to "DataCompression" and added new stuff to it.
 
 using System;
 using System.Collections;
@@ -137,14 +137,69 @@ internal static class Helper {
     }
 
     /// <summary>
-    /// String Compression stuff.
+    /// Compression stuff.
     /// </summary>
-    public class StringCompression {
+    public class DataCompression {
+
+        #region Byte Array
+        /// <summary>
+        /// Compresses and returns a byte array.
+        /// </summary>
+        /// <param name="uncompressedByteArray">Byte array to compress</param>
+        public static byte[] CompressByteArray(byte[] uncompressedByteArray)
+        {
+            try {
+                byte[] compressedBytes;
+
+                using (var uncompressedStream = new MemoryStream(uncompressedByteArray)) {
+                    using (var compressedStream = new MemoryStream()) {
+                        using (var compressorStream = new DeflateStream(compressedStream, CompressionLevel.Optimal, true)) {
+                            uncompressedStream.CopyTo(compressorStream);
+                        }
+                        compressedBytes = compressedStream.ToArray();
+                    }
+                }
+
+                return compressedBytes;
+            }
+            catch (Exception) {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Decompresses and returns a compressed byte array.
+        /// </summary>
+        /// <param name="compressedByteArray">Byte array to decompress.</param>
+        public static byte[] DecompressByteArray(byte[] compressedByteArray)
+        {
+            try {
+                byte[] decompressedBytes;
+
+                var compressedStream = new MemoryStream(compressedByteArray);
+
+                using (var decompressorStream = new DeflateStream(compressedStream, CompressionMode.Decompress)) {
+                    using (var decompressedStream = new MemoryStream()) {
+                        decompressorStream.CopyTo(decompressedStream);
+
+                        decompressedBytes = decompressedStream.ToArray();
+                    }
+                }
+
+                return decompressedBytes;
+            }
+            catch (Exception) {
+                return null;
+            }
+        }
+        #endregion
+
+        #region String
         /// <summary>
         /// Compresses a string and returns a deflate compressed, Base64 encoded string.
         /// </summary>
         /// <param name="uncompressedString">String to compress</param>
-        public static string Compress(string uncompressedString, string returnStringOnError = "")
+        public static string CompressString(string uncompressedString, string returnStringOnError = "")
         {
             try {
                 byte[] compressedBytes;
@@ -169,7 +224,7 @@ internal static class Helper {
         /// Decompresses a deflate compressed, Base64 encoded string and returns an uncompressed string.
         /// </summary>
         /// <param name="compressedString">String to decompress.</param>
-        public static string Decompress(string compressedString, string returnStringOnError = "")
+        public static string DecompressString(string compressedString, string returnStringOnError = "")
         {
             try {
                 byte[] decompressedBytes;
@@ -190,6 +245,8 @@ internal static class Helper {
                 return returnStringOnError;
             }
         }
+        #endregion
+
     }
 
     /// <summary>
