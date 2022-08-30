@@ -1,7 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 8/26/2022
-// Change: Changed "StringCompression" class name to "DataCompression" and added new stuff to it.
+// Last updated: 8/30/2022
+// Change: Renamed "IsUserConnectedToTheInternet" to "CheckForInternetConnection" and made it more reliable?
 
 using System;
 using System.Collections;
@@ -14,6 +14,7 @@ using System.IO;
 using System.IO.Compression;
 using System.Linq;
 using System.Management;
+using System.Net;
 using System.Net.NetworkInformation;
 using System.Reflection;
 using System.Security.Cryptography;
@@ -458,23 +459,33 @@ internal static class Helper {
         }
     }
 
-    public static bool IsUserConnectedToTheInternet()
-    {
-        try {
-            using (Ping ping = new Ping()) {
-                PingReply reply = ping.Send("8.8.8.8");
-                if (reply != null && reply.Status == IPStatus.Success) {
-                    return true;
-                }
-                else {
-                    return false;
-                }
+public static bool CheckForInternetConnection(int timeoutMs = 10000, string url = null)
+{
+    try {
+        if (string.IsNullOrWhiteSpace(url)) {
+            switch (CultureInfo.CurrentUICulture.Name) {
+                case "fa-IR": // Iran
+                    url = "http://www.aparat.com";
+                    break;
+                case "zh-CN": // China
+                    url = "http://www.baidu.com";
+                    break;
+                default:
+                    url = "http://www.gstatic.com/generate_204";
+                    break;
             }
         }
-        catch (Exception) {
-            return false;
-        }
+
+        var request = (HttpWebRequest)WebRequest.Create(url);
+        request.KeepAlive = false;
+        request.Timeout = timeoutMs;
+        using (var response = (HttpWebResponse)request.GetResponse())
+            return true;
     }
+    catch {
+        return false;
+    }
+}
 	
 	public static string GetDateAndTimeStringForFileName()
     {
