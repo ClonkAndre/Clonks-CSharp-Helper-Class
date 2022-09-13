@@ -5,6 +5,10 @@ public class JsonHelper {
 
     /// <summary>
     /// Helper class for Newtonsoft.Json Library to ignore properties from serialization.
+    /// <br/>
+    /// <b><br>Usage</br></b>
+    /// <see cref="Newtonsoft.Json.JsonConvert"/>.SerializeObject(YourObject, new <see cref="Newtonsoft.Json.JsonSerializerSettings"/>()
+    ///     { ContractResolver = new <see cref="IgnorePropertiesResolver"/>(new[] { "Prop1", "Prop2" }) });
     /// </summary>
     public class IgnorePropertiesResolver : Newtonsoft.Json.Serialization.DefaultContractResolver {
 
