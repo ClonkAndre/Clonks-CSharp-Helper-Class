@@ -1,7 +1,7 @@
 // Clonk's Helper Class
 // https://github.com/ClonkAndre/Clonks-CSharp-Helper-Class
-// Last updated: 9/4/2022
-// Change: Removed ConverterStuff class, Added DateAndTime class.
+// Last updated: 9/27/2022
+// Change: Made AResult use generic type.
 
 using System;
 using System.Collections;
@@ -55,15 +55,15 @@ public struct FileSize {
     }
     #endregion
 }
-public struct AResult {
+public struct AResult<T> {
 
     #region Properties
     public Exception Exception { get; private set; }
-    public object Result { get; private set; }
+    public T Result { get; private set; }
     #endregion
 
     #region Constructor
-    public AResult(Exception ex, object result)
+    public AResult(Exception ex, T result)
     {
         Exception = ex;
         Result = result;
@@ -548,7 +548,7 @@ public static bool CheckForInternetConnection(int timeoutMs = 10000, string url 
     /// The file name will be <b>lowered</b> while checking, so you should add file names to this list that are <b>lowercase</b>.
     /// </param>
     /// <returns>A <see cref="AResult"/> object that contains information if the operation failed or not. Returns an MD5 Hash string if successful.</returns>
-    public static AResult GetMD5StringFromFolder(string folder, List<string> ignoredFiles = null)
+    public static AResult<string> GetMD5StringFromFolder(string folder, List<string> ignoredFiles = null)
     {
         try {
             List<string> files = Directory.GetFiles(folder, "*.*", SearchOption.TopDirectoryOnly).OrderBy(p => p).ToList();
@@ -571,7 +571,7 @@ public static bool CheckForInternetConnection(int timeoutMs = 10000, string url 
 
                     // Hash contents
                     byte[] contentBytes = File.ReadAllBytes(file);
-                    if (contentBytes == null) return new AResult(new ArgumentNullException("contentBytes was null."), null);
+                    if (contentBytes == null) return new AResult<string>(new ArgumentNullException("contentBytes was null."), null);
 
                     if (i == (files.Count - 1)) {
                         md5.TransformFinalBlock(contentBytes, 0, contentBytes.Length);
@@ -582,11 +582,11 @@ public static bool CheckForInternetConnection(int timeoutMs = 10000, string url 
 
                 }
 
-                return new AResult(null, BitConverter.ToString(md5.Hash).Replace("-", "").ToLower());
+                return new AResult<string>(null, BitConverter.ToString(md5.Hash).Replace("-", "").ToLower());
             }
         }
         catch (Exception ex) {
-            return new AResult(ex, null);
+            return new AResult<string>(ex, null);
         }
     }
     /// <summary>
@@ -594,20 +594,20 @@ public static bool CheckForInternetConnection(int timeoutMs = 10000, string url 
     /// </summary>
     /// <param name="file">The file the hash should be created from.</param>
     /// <returns>A <see cref="AResult"/> object that contains information if the operation failed or not. Returns an MD5 Hash string if successful.</returns>
-    public static AResult GetMD5StringFromFile(string file)
+    public static AResult<string> GetMD5StringFromFile(string file)
     {
         try {
             using (MD5 md5 = MD5.Create()) {
                 byte[] contentBytes = File.ReadAllBytes(file);
-                if (contentBytes == null) return new AResult(new ArgumentNullException("contentBytes was null."), null);
+                if (contentBytes == null) return new AResult<string>(new ArgumentNullException("contentBytes was null."), null);
 
                 md5.TransformFinalBlock(contentBytes, 0, contentBytes.Length);
 
-                return new AResult(null, BitConverter.ToString(md5.Hash).Replace("-", "").ToLower());
+                return new AResult<string>(null, BitConverter.ToString(md5.Hash).Replace("-", "").ToLower());
             }
         }
         catch (Exception ex) {
-            return new AResult(ex, null);
+            return new AResult<string>(ex, null);
         }
     }
 
