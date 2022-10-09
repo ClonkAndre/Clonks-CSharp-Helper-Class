@@ -39,6 +39,28 @@ public class WPFStuff {
            ? Application.Current.Windows.OfType<T>().FirstOrDefault()
            : Application.Current.Windows.OfType<T>().FirstOrDefault(w => w.Name.Equals(name));
     }
+	
+    /// <summary>
+    /// Caches the image into memory which prevents the image file from being locked.
+    /// </summary>
+    /// <param name="uri">The uri that leads to the file path.</param>
+    /// <param name="freeze">If the image should be frozen or not.</param>
+    /// <returns>The loaded <see cref="BitmapImage"/>. Returns null on error.</returns>
+    public static BitmapImage LoadBitmapImageToMemory(Uri uri, bool freeze = false)
+    {
+        try {
+            BitmapImage bmi = new BitmapImage();
+            bmi.BeginInit();
+            bmi.UriSource = uri;
+            bmi.CacheOption = BitmapCacheOption.OnLoad;
+            bmi.EndInit();
+            if (freeze) bmi.Freeze();
+            return bmi;
+        }
+        catch (Exception) {
+            return null;
+        }
+    }
     #endregion
 			
 		#region Classes
